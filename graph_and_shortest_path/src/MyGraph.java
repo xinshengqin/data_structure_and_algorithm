@@ -69,10 +69,10 @@ public class MyGraph implements Graph {
                                 totalVertices.add(vertex);
                         }
 
-			//if (!adj.containsKey(vertex)) {// I am doing the exact same thing as
-			//								// before, shouldn't this way??
-			//	adj.put(vertex, new ArrayList<Edge>());
-			//}
+			if (!adj.containsKey(vertex)) {//add this vertex as a key in adj even if there might not be edge extending from it,
+                            //namely even if we end up with empty ArrayList as value of this key
+				adj.put(vertex, new ArrayList<Edge>());
+			}
 		}
 	}
 
@@ -195,11 +195,6 @@ public class MyGraph implements Graph {
 	 */
 	public Path shortestPath(Vertex a, Vertex b) {
 
-		// if there is no path, return null
-		if (!adj.containsKey(a) || !adj.containsKey(b)) {
-			return null;
-		}
-
 		List<Vertex> vertexList = new ArrayList<Vertex>();
 		PriorityQueue<Vertex> vertexQueue = new PriorityQueue<Vertex>();
 
@@ -209,6 +204,14 @@ public class MyGraph implements Graph {
 			vertexList.add(a);
 			return new Path(vertexList, 0);
 		}
+
+                //if the start and end vertex are not equal:
+
+		// if there is no path starting from a, return null
+		if (!adj.containsKey(a) {
+			return null;
+		}
+
 
 		// Set source vertex distance to 0
 		a.distance = 0;
@@ -221,6 +224,10 @@ public class MyGraph implements Graph {
 		vertexQueue.add(a);
 		vertexList = dijkstra(vertexQueue, b, adj.keySet());
 		return new Path(vertexList, b.distance);
+
+                //TODO: after searching for all possible path, return null if there is no path from a to b
+
+
 
 	}
 

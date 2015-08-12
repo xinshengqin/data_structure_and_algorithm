@@ -42,6 +42,20 @@ public class FindPaths {
 				System.exit(1);
 			}
 
+                        
+                        Path p = new Path();
+                        p = g.shortestPath(a,b);
+                        System.out.println("Shortest path from " + a + " to " + b + ": ");
+                        if ( p == null) {
+                                System.out.println("does not exist");
+                        }
+                        else {
+                                System.out.println(p);
+                                System.out.println(p.getCost());
+                        }
+
+
+
 			// YOUR CODE HERE: call shortestPath and print
 			// out the result
 		}
