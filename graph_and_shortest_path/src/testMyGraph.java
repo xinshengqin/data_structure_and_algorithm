@@ -32,6 +32,9 @@ public class testMyGraph {
 
 		System.out.println("Vertices are " + v);
 		System.out.println("Edges are " + e);
+                
+                //for test
+                System.exit(1);
 
 		while (true) {
 			System.out.print("Start vertex? ");

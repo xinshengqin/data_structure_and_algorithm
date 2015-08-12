@@ -22,6 +22,7 @@ public class Edge {
 			throw new IllegalArgumentException("null");
                 if (w < 0) {
                         throw new IllegalArgumentException("negative edge weight");
+                }
 		this.from = from;
 		this.to = to;
 		this.w = w;
@@ -116,5 +117,6 @@ public class Edge {
 			return false;
                 //At this point, this and obj are the same except for weight
                 return w != other.w;
+        }
                 
 }

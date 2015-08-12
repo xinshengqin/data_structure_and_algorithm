@@ -53,17 +53,7 @@ public class MyGraph implements Graph {
 		// for (iterable_type iterable_element : collection)
 		// Add edges and vertex to the map
 		for (Edge edge : e) {
-
-                        //check repeated Edge
-                        //check if there are already the same directed edge in totalEdges with different weight
-                        for (Edge ed : totalEdges) {
-                                if (e.ambivalentConnection(ed)) {
-                                        //TODO: define this exception
-                                        //throw new IllegalGraphData("repeated directed edge with a different weight";
-                                        //break;
-                                }
-                        }
-
+                        if (!totalEdges.contains(edge)) {
                         totalEdges.add(edge);
                 }
                         //if this vertex is not in key groups of the HashMap, add it to the group
@@ -75,14 +65,14 @@ public class MyGraph implements Graph {
 		}
 
 		for (Vertex vertex : v) {
-                        if (!totalVertices.contains(Vertex){
+                        if (!totalVertices.contains(vertex)) {
                                 totalVertices.add(vertex);
                         }
 
-			if (!adj.containsKey(vertex)) {// I am doing the exact same thing as
-											// before, shouldn't this way??
-				adj.put(vertex, new ArrayList<Edge>());
-			}
+			//if (!adj.containsKey(vertex)) {// I am doing the exact same thing as
+			//								// before, shouldn't this way??
+			//	adj.put(vertex, new ArrayList<Edge>());
+			//}
 		}
 	}
 
