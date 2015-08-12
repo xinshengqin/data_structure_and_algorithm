@@ -46,7 +46,6 @@ public class MyGraph implements Graph {
 		adj = new HashMap<Vertex, ArrayList<Edge>>();
 		totalEdges = new ArrayList<Edge>();
                 totalVertices = new ArrayList<Vertex>();
-                //TODO check checkExcepction() function
 		checkExcepction(v, e); 
 
 		// loop through a collection
@@ -196,7 +195,8 @@ public class MyGraph implements Graph {
 	public Path shortestPath(Vertex a, Vertex b) {
 
 		List<Vertex> vertexList = new ArrayList<Vertex>();
-		PriorityQueue<Vertex> vertexQueue = new PriorityQueue<Vertex>();
+                VertexComparator vcp = new VertexComparator();
+		PriorityQueue<Vertex> vertexQueue = new PriorityQueue<Vertex>(10, vcp); //queue for unknow vertex
 
 		// If the start and end vertex are equal
 		// return a path containing one vertex and a cost of 0.
@@ -208,61 +208,111 @@ public class MyGraph implements Graph {
                 //if the start and end vertex are not equal:
 
 		// if there is no path starting from a, return null
-		if (!adj.containsKey(a) {
+		if (!adj.containsKey(a)) {
 			return null;
 		}
 
+                //for (Vertex v : this.vertices() ) {
+                //    System.out.println(v.known);
+                //}
 
-		// Set source vertex distance to 0
-		a.distance = 0;
+                //initialize before searching path
 		for (Vertex v : adj.keySet()) {
-			// set other vertex distance to infinity
-			v.distance = Integer.MAX_VALUE;
-			v.known = false;
+                        //variables in adj.keySet() are actually pointers pointing to different memory with those in this.vertices()
+                        //what we need is actually to change those in memory pointed by this.vertices()
+                        //have no idea why this.vertices.get() method did not work
+                        //thus I have to implement as below
+                        Vertex vn = v;//actually this is a bad initialization
+                        for (Vertex vi: this.vertices() ) {
+                            if (vi.equals(v)) {
+                                vn = vi;
+                            }
+                        }
+
+                        vn.known = false;
+			// set all vertex distance to infinity
+			vn.distance = Integer.MAX_VALUE;
+			//vn.distance = 99999;
+                        vertexQueue.add(vn);
 		}
+                //System.exit(1);
+		// Set source vertex distance to 0
+                for (Vertex vn: this.vertices() ) {
+                    if (vn.equals(a)) {
+                        vertexQueue.remove(vn);
+                        vn.distance = 0;
+                        vn.previous = vn;
+                        //update vn in vertexQueue
+                        vertexQueue.add(vn);
+                    }
+                }
+		//a.distance = 0;
+                //a.previous = a;
+                //vertexQueue.remove(a);
+                //vertexList.add(a);
 
-		vertexQueue.add(a);
-		vertexList = dijkstra(vertexQueue, b, adj.keySet());
-		return new Path(vertexList, b.distance);
 
+                Vertex end = b;
+                for (Vertex vn: this.vertices() ) {
+                    if (vn.equals(b)) {
+                        end = vn;
+                    }
+                }
+                //for (Vertex v : this.vertices() ) {
+                //    System.out.println(v.distance);
+                //}
+                System.out.println("start searching...");
+                //while ( (!vertexQueue.isEmpty()) && (end.known == false) ) { //while there are still unknow vertex and vertex b is unknown
+                while ( (!vertexQueue.isEmpty()) )  { //while there are still unknow vertex and vertex b is unknown
+                        //System.out.println("elements in vertexQueue at beginning:");
+                        //for (Vertex v : vertexQueue ) {
+                        //    System.out.println(v.getLabel());
+                        //    System.out.println("distance: " + v.distance);
+                        //}
+                        Vertex nt = vertexQueue.poll();//unknown node with smallest distance
+                        //System.out.println("marked " + nt + " as known.");
+                        //System.out.println("its current distance: " + nt.distance);
+                        nt.known = true;
+                        for (Edge e : adj.get(nt)) {
+                            //search for vertex with the same name as e.getDestination() in this.vertices()
+                            Vertex en = e.getDestination();
+                            for (Vertex vn: this.vertices() ) {
+                                if (vn.equals(e.getDestination())) {
+                                    en = vn;
+                                }
+                            }
+
+                            if ( !en.known ) {
+                                if ( (nt.distance + e.getWeight()) < en.distance ) {
+                                    //update en in vertexQueue
+                                    vertexQueue.remove(en);
+                                    en.distance = nt.distance + e.getWeight();
+                                    en.previous = nt;
+                                    vertexQueue.add(en);
+                                }
+                            }
+                        }
+                }
+                System.out.println("finished computing shortest path.");
+                //for (Vertex v : this.vertices() ) {
+                //    System.out.println(v.distance);
+                //}
+
+                //traverse to get path from a to b
+                Vertex tmp = end;
+                while (!tmp.equals(a)) {
+                    vertexList.add(0,tmp);//may need a heap here?
+                    tmp = tmp.previous;
+                }
+                vertexList.add(0,a);
+                return new Path(vertexList,end.distance); 
+
+                    
                 //TODO: after searching for all possible path, return null if there is no path from a to b
 
 
 
 	}
 
-	private List<Vertex> dijkstra(PriorityQueue<Vertex> q, Vertex vertex_b, Set<Vertex> keys) {
-		while (!q.isEmpty()) {
-
-			// return the head of the Queue
-			Vertex current = q.poll();
-			// indicate that the node has been processed
-			current.known = true;
-
-			// Visit each edge exiting current node
-			for (Edge e : adj.get(current)) {
-				Vertex next = e.getDestination();
-
-				if (!next.known) { // next node hasn't been processed yet
-					int distanceThroughU = current.distance + e.getWeight();
-					if (distanceThroughU < next.distance) {
-						q.remove(next);
-						next.distance = distanceThroughU;
-						next.previous = current;
-						q.add(next);
-					}
-				}
-			}
-		}
-
-		// get the shortest path to the target vertex
-		List<Vertex> path = new ArrayList<Vertex>();
-		for (Vertex vertex = vertex_b; vertex != null; vertex = vertex.previous) {
-			path.add(vertex);
-		}
-		Collections.reverse(path);
-		return path;
-
-	}
 
 }

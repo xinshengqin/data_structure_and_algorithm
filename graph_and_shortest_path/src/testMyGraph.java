@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.PriorityQueue;
 import graph.*;
 
 /**
@@ -33,27 +34,56 @@ public class testMyGraph {
 		System.out.println("Vertices are " + v);
 		System.out.println("Edges are " + e);
                 
-                //for test
+                //test VertexComparator
+                VertexComparator vcp = new VertexComparator();
+		PriorityQueue<Vertex> vertexQueue = new PriorityQueue<Vertex>(10, vcp); //queue for unknow vertex
+                Vertex v1 = new Vertex("a");
+                Vertex v2 = new Vertex("b");
+                Vertex v3 = new Vertex("c");
+                v1.distance = Integer.MAX_VALUE;
+                v2.distance = 0;
+                v3.distance = 9;
+                vertexQueue.add(v1);
+                vertexQueue.add(v2);
+                vertexQueue.add(v3);
+                while (!vertexQueue.isEmpty()) {
+                    Vertex tmp = vertexQueue.poll();
+                    System.out.println(tmp);
+                    System.out.println(tmp.distance);
+                }
+
+                Vertex a = new Vertex("ORD");
+                Vertex b = new Vertex("LAX");
+                Path p = g.shortestPath(a,b);
+                System.out.println("Shortest path from " + a + " to " + b + ": ");
+                if ( p == null) {
+                        System.out.println("does not exist");
+                }
+                else {
+                        System.out.println(p.vertices);
+                        System.out.println(p.cost);
+                }
+                
                 System.exit(1);
 
-		while (true) {
-			System.out.print("Start vertex? ");
-			Vertex a = new Vertex(console.nextLine());
-			if (!v.contains(a)) {
-				System.out.println("no such vertex");
-				System.exit(1);
-			}
+		//while (true) {
+		//	System.out.print("Start vertex? ");
+		//	Vertex a = new Vertex(console.nextLine());
+		//	if (!v.contains(a)) {
+		//		System.out.println("no such vertex");
+		//		System.exit(1);
+		//	}
 
-			System.out.print("Destination vertex? ");
-			Vertex b = new Vertex(console.nextLine());
-			if (!v.contains(b)) {
-				System.out.println("no such vertex");
-				System.exit(1);
-			}
+		//	System.out.print("Destination vertex? ");
+		//	Vertex b = new Vertex(console.nextLine());
+		//	if (!v.contains(b)) {
+		//		System.out.println("no such vertex");
+		//		System.exit(1);
+		//	}
 
-			// YOUR CODE HERE: call shortestPath and print
-			// out the result
-		}
+		//	// YOUR CODE HERE: call shortestPath and print
+		//	// out the result
+		//}
 	}
 
 	public static MyGraph readGraph(String f1, String f2) {

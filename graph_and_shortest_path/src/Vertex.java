@@ -2,6 +2,7 @@
  * Representation of a graph vertex
  */
 package graph;
+import java.util.ArrayList;
 public class Vertex {
 	// label attached to this vertex
 	private String label;
@@ -39,6 +40,9 @@ public class Vertex {
 	public String toString() {
 		return label;
 	}
+
+
+            
 
 	// auto-generated: hashes on label
 	public int hashCode() {

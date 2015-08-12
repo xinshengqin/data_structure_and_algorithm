@@ -12,7 +12,7 @@ JFLAGS = -g -d $(BIN) -cp $(LIB)
 # typing 'make' will invoke the first target entry in the makefile 
 # (the default one in this case)
 #default: Average.class Convert.class Volume.class
-default: Edge.class Graph.class Path.class Vertex.class FindPaths.class MyGraph.class testMyGraph.class
+default: Edge.class Graph.class Path.class Vertex.class FindPaths.class MyGraph.class testMyGraph.class VertexComparator.class
 
 # this target entry builds the Average class
 # the Average.class file is dependent on the Average.java file
@@ -34,10 +34,13 @@ Vertex.class:
 FindPaths.class: MyGraph.class 
 	$(JCC) $(JFLAGS) $(SRC)/FindPaths.java
 
-MyGraph.class: 
+MyGraph.class: VertexComparator.class 
 	$(JCC) $(JFLAGS) $(SRC)/MyGraph.java
 
-testMyGraph.class: 
+VertexComparator.class:
+	$(JCC) $(JFLAGS) $(SRC)/VertexComparator.java
+
+testMyGraph.class: VertexComparator.class
 	$(JCC) $(JFLAGS) $(SRC)/testMyGraph.java
 
 
