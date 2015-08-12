@@ -1,3 +1,4 @@
+package graph;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,7 +20,12 @@ public class MyGraph implements Graph {
 
 	private Collection<Vertex> totalVertices;
 	private Collection<Edge> totalEdges;
+
+        //key: Vertex; value: ArrayList<Edge> with all Edge starting from this Vertex.
 	private Map<Vertex, ArrayList<Edge>> adj;
+        //TODO: if we need a Map which records all Edge pointing to a Vertex?
+
+
 	private int distance;
 
 	/**
@@ -39,6 +45,7 @@ public class MyGraph implements Graph {
 
 		adj = new HashMap<Vertex, ArrayList<Edge>>();
 		totalEdges = new ArrayList<Edge>();
+                totalVertices = new ArrayList<Vertex>();
                 //TODO check checkExcepction() function
 		checkExcepction(v, e); 
 
@@ -46,18 +53,32 @@ public class MyGraph implements Graph {
 		// for (iterable_type iterable_element : collection)
 		// Add edges and vertex to the map
 		for (Edge edge : e) {
-			totalEdges.add(edge);
-			if (!adj.containsKey(edge.getSource())) {
-				// put in vertex
-				adj.put(edge.getSource(), new ArrayList<Edge>());
 
+                        //check repeated Edge
+                        //check if there are already the same directed edge in totalEdges with different weight
+                        for (Edge ed : totalEdges) {
+                                if (e.ambivalentConnection(ed)) {
+                                        //TODO: define this exception
+                                        //throw new IllegalGraphData("repeated directed edge with a different weight";
+                                        //break;
+                                }
+                        }
+
+                        totalEdges.add(edge);
+                }
+                        //if this vertex is not in key groups of the HashMap, add it to the group
+			if (!adj.containsKey(edge.getSource())) {
+				adj.put(edge.getSource(), new ArrayList<Edge>());
 			}
-			// put in edge
+			// add edge to the ArrayList, which is the "value" in key-value pairs in HashMap, adj.
 			adj.get(edge.getSource()).add(edge);
 		}
 
 		for (Vertex vertex : v) {
-			totalVertices.add(vertex);
+                        if (!totalVertices.contains(Vertex){
+                                totalVertices.add(vertex);
+                        }
+
 			if (!adj.containsKey(vertex)) {// I am doing the exact same thing as
 											// before, shouldn't this way??
 				adj.put(vertex, new ArrayList<Edge>());

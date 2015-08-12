@@ -1,6 +1,7 @@
 /**
  * Representation of a graph vertex
  */
+package graph;
 public class Vertex {
 	// label attached to this vertex
 	private String label;

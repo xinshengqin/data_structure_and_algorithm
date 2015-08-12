@@ -1,6 +1,8 @@
 /**
  * Representation of a directed graph edge.
  */
+package graph;
+//import graph.Vertex;
 public class Edge {
 	private Vertex from, to;
 	private int w;
@@ -18,6 +20,8 @@ public class Edge {
 	public Edge(Vertex from, Vertex to, int w) {
 		if (from == null || to == null)
 			throw new IllegalArgumentException("null");
+                if (w < 0) {
+                        throw new IllegalArgumentException("negative edge weight");
 		this.from = from;
 		this.to = to;
 		this.w = w;
@@ -90,4 +94,27 @@ public class Edge {
 			return false;
 		return w == other.w;
 	}
+
+        //return true only if two edges have the same edge.from and edge.to but different weights
+        public boolean ambivalentConnection(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		final Edge other = (Edge) obj;
+		if (from == null) {
+			if (other.from != null)
+				return false;
+		} else if (!from.equals(other.from))
+			return false;
+		if (to == null) {
+			if (other.to != null)
+				return false;
+		} else if (!to.equals(other.to))
+			return false;
+                //At this point, this and obj are the same except for weight
+                return w != other.w;
+                
 }
